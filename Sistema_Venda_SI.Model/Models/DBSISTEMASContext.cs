@@ -15,9 +15,12 @@ public partial class DBSISTEMASContext : DbContext
     }
 
 
+    public DBSISTEMASContext()
+    {
+            
+    }
 
-
-protected override void OnConfiguring(DbContextOptionsBuilder optionsbuilder)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsbuilder)
 
 => optionsbuilder.UseSqlServer("data source=Localhost\\SQLEXPRESS;Initial Catalog=DBSISTEMAS;Integrated Security=True; TrustServerCertificate=True");
     public virtual DbSet<Cliente> Cliente { get; set; }

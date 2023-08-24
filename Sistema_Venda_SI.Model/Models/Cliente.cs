@@ -7,6 +7,7 @@ namespace Sistema_Venda_SI.Model.Models;
 
 public partial class Cliente
 {
+
     public int CliCodigo { get; set; }
 
     public string CliNome { get; set; }

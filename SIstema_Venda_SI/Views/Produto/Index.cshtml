@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Sistema_Venda_SI.Model.Models.Produto>
+﻿@model IEnumerable<ProdutoVM>
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -16,6 +16,16 @@
                 <th>
                     Descrição
                 </th>
+                <th>
+                    Tipo de Produto
+                </th>
+                <th>
+                    Unidade
+                </th>
+
+                <th>
+                    
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -23,10 +33,21 @@
             {
                 <tr>
                     <td>
-                        @item.ProCodigo
+                        @item.Codigo
                     </td>
                     <td>
-                        @item.ProDescricao
+                        @item.Descricao
+                    </td>
+                    <td>
+                        @item.TipoProduto
+                    </td>
+                    <td>
+                        @item.Unidade
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit", new {  id=item.Codigo}) |
+                        @Html.ActionLink("Detalhes", "Detail", new { id=item.Codigo }) |
+                        @Html.ActionLink("Excluir", "Delete", new { id=item.Codigo })
                     </td>
                 </tr>
                 
