@@ -1,20 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol;
 using Sistema_Venda_SI.Model.Models;
+using Sistema_Venda_SI.Model.Service;
 
 namespace SIstema_Venda_SI.Controllers
 {
     public class TipoProdutoController : Controller
     {
-        private readonly DBSISTEMASContext _context;
-
+       
+     
         public TipoProdutoController(DBSISTEMASContext context)
         {
-            _context = context;
+            
         }
 
-        public IActionResult Index()
+        public async Task< IActionResult> Index()
         {
-            var listaTipoProduto = _context.TipoProduto.ToList();
+            var listaTipoProduto = await _serviceTipoProduto.oRepositoryTipoProduto.SelecionarTodosAsync();
             return View(listaTipoProduto);
         }
 
@@ -27,11 +29,11 @@ namespace SIstema_Venda_SI.Controllers
         [HttpPost]
         public IActionResult Create(TipoProduto tipoProduto)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Entry(tipoProduto).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                _context.SaveChanges();
-            }
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Entry(tipoProduto).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+            //    _context.SaveChanges();
+            //}
             return View();
         }
 
@@ -39,9 +41,9 @@ namespace SIstema_Venda_SI.Controllers
         [HttpGet]
         public IActionResult Edit (int id)
         {
-            var tipoProduto = _context.TipoProduto.FirstOrDefault(x => x.TipCodigo == id);
+          //  var tipoProduto = _context.TipoProduto.FirstOrDefault(x => x.TipCodigo == id);
 
-            return View(tipoProduto);
+            return View();
 
         }
 
@@ -50,9 +52,9 @@ namespace SIstema_Venda_SI.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Entry(tipoProduto).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                _context.SaveChanges();
-                return View();
+                //_context.Entry(tipoProduto).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                //_context.SaveChanges();
+                //return View();
             }
             ViewData["MensagemErro"] = "Ocorreu um erro";
             
@@ -62,9 +64,9 @@ namespace SIstema_Venda_SI.Controllers
         public IActionResult Delete (int id)
         {
 
-            var tipoProduto = _context.TipoProduto.FirstOrDefault(x => x.TipCodigo == id);
-            _context.Entry(tipoProduto).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-            _context.SaveChanges();
+            //var tipoProduto = _context.TipoProduto.FirstOrDefault(x => x.TipCodigo == id);
+            //_context.Entry(tipoProduto).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+            //_context.SaveChanges();
             return RedirectToAction("Index");
 
         }
@@ -72,8 +74,8 @@ namespace SIstema_Venda_SI.Controllers
         [HttpGet]
         public IActionResult Details(int id) 
         {
-            var tipoProduto = _context.TipoProduto.Find(id);
-            return View(tipoProduto);
+            // var tipoProduto = _context.TipoProduto.Find(id);
+            return View();
 
 
         }
