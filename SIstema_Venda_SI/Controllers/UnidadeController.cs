@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sistema_Venda_SI.Model.Models;
+using Sistema_Venda_SI.Model.Service;
 
 namespace SIstema_Venda_SI.Controllers
 {
@@ -8,23 +9,24 @@ namespace SIstema_Venda_SI.Controllers
     {
         // GET: UnidadeController
 
-        private readonly DBSISTEMASContext _context;
+        private ServiceUnidade _ServiceUnidade;
 
-        public UnidadeController(DBSISTEMASContext context)
+        public UnidadeController()
         {
-            _context = context;
+            _ServiceUnidade = new ServiceUnidade();
         }
 
-        public ActionResult Index()
+
+        public async Task<ActionResult> Index()
         {
-            var listaUnidades = _context.Unidade.ToList();
+            var listaUnidades = await _ServiceUnidade.oRepositoryUnidade.SelecionarTodosAsync();
             return View(listaUnidades);
         }
 
         // GET: UnidadeController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            var unidade = _context.Unidade.FirstOrDefault(x => x.UnCodigo == id);
+            var unidade = await _ServiceUnidade.oRepositoryUnidade.SelecionarPkAsync(id);
 
             return View(unidade);
         }
@@ -37,52 +39,48 @@ namespace SIstema_Venda_SI.Controllers
 
         // POST: UnidadeController/Create
         [HttpPost]
-     
-        public IActionResult Create(Unidade unidade)
+
+        public async Task<IActionResult> Create(Unidade unidade)
         {
             if (ModelState.IsValid)
             {
-                _context.Entry(unidade).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                _context.SaveChanges();
+                unidade = await _ServiceUnidade.oRepositoryUnidade.IncluirAsync(unidade);
                 return View(unidade);
             }
             return View();
-           
+
         }
 
         // GET: UnidadeController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            var unidade = _context.Unidade.FirstOrDefault(x => x.UnCodigo == id);
+            var unidade = await _ServiceUnidade.oRepositoryUnidade.SelecionarPkAsync(id);
             return View(unidade);
         }
 
         // POST: UnidadeController/Edit/5
         [HttpPost]
-      
-        public ActionResult Edit(Unidade unidade)
+
+        public async Task<IActionResult> Edit(Unidade unidade)
         {
             if (ModelState.IsValid)
             {
-                _context.Entry(unidade).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                _context.SaveChanges();
+                unidade = await _ServiceUnidade.oRepositoryUnidade.AlterarAsync(unidade);
                 return View(unidade);
             }
             return View();
         }
 
         // GET: UnidadeController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var unidade = _context.Unidade.FirstOrDefault(x => x.UnCodigo == id);
-            _context.Entry(unidade).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-            _context.SaveChanges();
-            return RedirectToAction ("Index");
-                
-                }
+           await _ServiceUnidade.oRepositoryUnidade.ExcluirAsync(id);
+            return RedirectToAction("Index");
+
+        }
 
         // POST: UnidadeController/Delete/5
-     
-      
+
+
     }
 }

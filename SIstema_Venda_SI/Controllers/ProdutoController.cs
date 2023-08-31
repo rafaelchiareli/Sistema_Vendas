@@ -2,17 +2,19 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sistema_Venda_SI.Model.Models;
+using Sistema_Venda_SI.Model.Service;
 using SIstema_Venda_SI.ViewModel;
 
 namespace SIstema_Venda_SI.Controllers
 {
     public class ProdutoController : Controller
     {
-        private readonly DBSISTEMASContext _context;
+        private ServiceProduto _ServiceProduto;
 
-        public ProdutoController(DBSISTEMASContext context)
+        public ProdutoController()
         {
-            _context = context;
+            _ServiceProduto = new ServiceProduto(); 
+
         }
 
         public IActionResult Index()
@@ -23,19 +25,18 @@ namespace SIstema_Venda_SI.Controllers
 
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task< IActionResult> Edit(int id)
         {
-            var produto = _context.Produto.Find(id);
+            var produto = await _ServiceProduto.oRepositoryProduto.SelecionarPkAsync(id);
             CarregaDadosViewBag();
             return View(produto);
         }
 
-        public IActionResult Edit (Produto produto)
+        public async Task<IActionResult> Edit (Produto produto)
         {
             if (ModelState.IsValid)
             {
-                _context.Entry(produto).State = EntityState.Modified;
-                _context.SaveChanges();
+                produto = await _ServiceProduto.oRepositoryProduto.AlterarAsync(produto);
                 CarregaDadosViewBag();
                 return View(produto);
             }
@@ -55,17 +56,16 @@ namespace SIstema_Venda_SI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete (ProdutoVM produtoVM)
+        public  async Task<IActionResult> Delete (ProdutoVM produtoVM)
         {
-            var produto = _context.Produto.Find(produtoVM.Codigo);
-            _context.Entry(produto).State = EntityState.Deleted;
-            _context.SaveChanges();
+            var produto = await _ServiceProduto.oRepositoryProduto.SelecionarPkAsync(produtoVM.Codigo);
+            await _ServiceProduto.oRepositoryProduto.ExcluirAsync(produto);
             return RedirectToAction("Index");
         }
         public void CarregaDadosViewBag()
         {
-            ViewData["ProCodigoTipoProduto"] = new SelectList(_context.TipoProduto, "TipCodigo", "TipDescricao");
-            ViewData["ProCodigoUnidade"] = new SelectList(_context.Unidade, "UnCodigo", "UnDescricao");
+            ViewData["ProCodigoTipoProduto"] = new SelectList(_ServiceProduto.oRepositoryProduto.SelecionarTodos(), "TipCodigo", "TipDescricao");
+            ViewData["ProCodigoUnidade"] = new SelectList(_ServiceProduto.oRepositoryUnidade.SelecionarTodos(), "UnCodigo", "UnDescricao");
         }
 
 
@@ -78,13 +78,12 @@ namespace SIstema_Venda_SI.Controllers
   
 
         [HttpPost]
-        public IActionResult Create(Produto produto)
+        public async Task<IActionResult> Create(Produto produto)
         {
             CarregaDadosViewBag();
             if (ModelState.IsValid)
             {
-                _context.Entry(produto).State = EntityState.Added;
-                _context.SaveChanges();
+               produto = await _ServiceProduto.oRepositoryProduto.IncluirAsync(produto);    
                
                 return View(produto);
 

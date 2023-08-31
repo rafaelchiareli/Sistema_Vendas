@@ -7,75 +7,70 @@ namespace SIstema_Venda_SI.Controllers
 {
     public class TipoProdutoController : Controller
     {
-       
-     
-        public TipoProdutoController(DBSISTEMASContext context)
+
+        private ServiceTipoProduto _ServiceTipoProduto;
+        public TipoProdutoController()
         {
-            
+            _ServiceTipoProduto = new ServiceTipoProduto();
         }
 
-        public async Task< IActionResult> Index()
+        public async Task<IActionResult> Index()
         {
-            var listaTipoProduto = await _serviceTipoProduto.oRepositoryTipoProduto.SelecionarTodosAsync();
+            var listaTipoProduto = await _ServiceTipoProduto.oRepositoryTipoProduto.SelecionarTodosAsync();
             return View(listaTipoProduto);
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public ActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(TipoProduto tipoProduto)
+        public async Task<IActionResult> Create(TipoProduto tipoProduto)
         {
-            //if (ModelState.IsValid)
-            //{
-            //    _context.Entry(tipoProduto).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-            //    _context.SaveChanges();
-            //}
-            return View();
+            var tipoProdutoSalvo = await _ServiceTipoProduto.oRepositoryTipoProduto.IncluirAsync(tipoProduto);
+
+            return View(tipoProdutoSalvo);
         }
 
 
         [HttpGet]
-        public IActionResult Edit (int id)
+        public async Task<IActionResult> Edit(int id)
         {
-          //  var tipoProduto = _context.TipoProduto.FirstOrDefault(x => x.TipCodigo == id);
+            var tipoProduto = await _ServiceTipoProduto.oRepositoryTipoProduto.SelecionarPkAsync(id);
 
-            return View();
+            return View(tipoProduto);
 
         }
 
         [HttpPost]
-        public IActionResult Edit(TipoProduto tipoProduto)
+        public async Task<IActionResult> Edit(TipoProduto tipoProduto)
         {
             if (ModelState.IsValid)
             {
-                //_context.Entry(tipoProduto).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                //_context.SaveChanges();
-                //return View();
+                var tipoProdutoSalvo = await _ServiceTipoProduto.oRepositoryTipoProduto.AlterarAsync(tipoProduto);
+               
+                return View(tipoProdutoSalvo);
             }
             ViewData["MensagemErro"] = "Ocorreu um erro";
-            
+
             return View();
         }
         [HttpGet]
-        public IActionResult Delete (int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            await _ServiceTipoProduto.oRepositoryTipoProduto.ExcluirAsync(id);
 
-            //var tipoProduto = _context.TipoProduto.FirstOrDefault(x => x.TipCodigo == id);
-            //_context.Entry(tipoProduto).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-            //_context.SaveChanges();
             return RedirectToAction("Index");
 
         }
 
         [HttpGet]
-        public IActionResult Details(int id) 
+        public async Task<IActionResult> Details(int id)
         {
-            // var tipoProduto = _context.TipoProduto.Find(id);
-            return View();
+            var tipoProduto = await _ServiceTipoProduto.oRepositoryTipoProduto.SelecionarPkAsync(id);
+            return View(tipoProduto);
 
 
         }
