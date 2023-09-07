@@ -7,14 +7,17 @@ using System.Threading.Tasks;
 
 namespace Sistema_Venda_SI.Model.Service
 {
-    public  class ServiceProduto
+    public class ServiceProduto
     {
-      public  RepositoryProduto oRepositoryProduto { get; set; }
+        public RepositoryProduto oRepositoryProduto { get; set; }
         public RepositoryUnidade oRepositoryUnidade { get; set; }
+
+        public RepositoryTipoProduto oRepositoryTipoProduto { get; set; }
         public ServiceProduto()
         {
-                oRepositoryProduto = new RepositoryProduto();
+            oRepositoryProduto = new RepositoryProduto();
             oRepositoryUnidade = new RepositoryUnidade();
+            oRepositoryTipoProduto = new RepositoryTipoProduto();
         }
     }
 }

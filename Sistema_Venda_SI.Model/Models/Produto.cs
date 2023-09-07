@@ -2,29 +2,26 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Sistema_Venda_SI.Model.Models;
 
 public partial class Produto
 {
-    [Display(Name ="Código")]
     public int ProCodigo { get; set; }
-    [Display(Name = "Código de Barras")]
+
     public string ProCodigoBarras { get; set; }
 
-    [Display(Name = "Descrição")]
     public string ProDescricao { get; set; }
-    [Display(Name = "Data de Cadastro")]
+
     public DateTime ProDataCadastro { get; set; }
-    [Display(Name = "Desativado")]
+
     public bool ProDesativado { get; set; }
-    [Display(Name = "Tipo de Produto")]
+
     public int? ProCodigoTipoProduto { get; set; }
-    [Display(Name = "Unidade")]
+
     public int? ProCodigoUnidade { get; set; }
 
-    public virtual EntradaProduto EntradaProduto { get; set; }
+    public virtual ICollection<EntradaProduto> EntradaProduto { get; set; } = new List<EntradaProduto>();
 
     public virtual TipoProduto ProCodigoTipoProdutoNavigation { get; set; }
 

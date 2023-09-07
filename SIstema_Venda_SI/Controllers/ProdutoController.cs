@@ -64,7 +64,7 @@ namespace SIstema_Venda_SI.Controllers
         }
         public void CarregaDadosViewBag()
         {
-            ViewData["ProCodigoTipoProduto"] = new SelectList(_ServiceProduto.oRepositoryProduto.SelecionarTodos(), "TipCodigo", "TipDescricao");
+            ViewData["ProCodigoTipoProduto"] = new SelectList(_ServiceProduto.oRepositoryTipoProduto.SelecionarTodos(), "TipCodigo", "TipDescricao");
             ViewData["ProCodigoUnidade"] = new SelectList(_ServiceProduto.oRepositoryUnidade.SelecionarTodos(), "UnCodigo", "UnDescricao");
         }
 

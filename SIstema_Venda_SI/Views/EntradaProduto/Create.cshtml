@@ -1,0 +1,136 @@
+﻿@model SIstema_Venda_SI.ViewModel.EntradaProdutoVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>EntradaProdutoVM</h4>
+<hr />
+<div class="row">
+
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div style="display: flex;gap: 25px">
+            <div class="form-group">
+                <label asp-for="EntDataHora" class="control-label"></label>
+                <input type="datetime-local" asp-for="EntDataHora" class="form-control" />
+                <span asp-validation-for="EntDataHora" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EnNuneroNotaFiscal" class="control-label"></label>
+                <input asp-for="EnNuneroNotaFiscal" class="form-control" />
+                <span asp-validation-for="EnNuneroNotaFiscal" class="text-danger"></span>
+            </div>
+
+        </div>
+
+
+        <div style="display: flex;flex-direction: row; margin-top: 25px;gap: 25px">
+            <div>
+                <label class="form-label">Produto</label>
+                <select id="cboProduto" class="form-select">
+                    <option value="" selected>Selecione um produto</option>
+                    @{
+                        if (ViewBag.listaProdutos != null)
+                        {
+                            foreach (Sistema_Venda_SI.Model.Models.Produto item in ViewBag.listaProdutos)
+                            {
+                                    <option value="@item.ProCodigo">@item.ProDescricao</option>
+                            }
+                        }
+
+                    }
+                </select>
+
+            </div>
+            <div>
+                <label class="form-label">Quantidade</label>
+                <input type="number" class="form-control" id="txtQtd" />
+            </div>
+
+            <div>
+                <label class="form-label">Valor Custo</label>
+                <input type="number" class="form-control" id="txtValorCurso" />
+            </div>
+
+            <div>
+                <label class="form-label">Valor Venda</label>
+                <input type="number" class="form-control" id="txtValorVenda" />
+            </div>
+
+            <div>
+                <button type="button" class="btn btn-secondary" onclick="adicionar()">Incluir</button>
+            </div>
+        </div>
+        <div>
+            <table class="table" id="tabelaItens">
+                <thead>
+                    <tr>
+                        <th>
+                            Produto
+                        </th>
+                        <th>
+                            Quantidade
+                        </th>
+                        <th>
+                            Valor Custo
+                        </th>
+                        <th>
+                            Valor Venda
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
+
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+
+    <script>
+
+
+        function adicionar() {
+            var contador = $("#tabelaItens tbody tr").length;
+
+            var produto = $("#cboProduto option:selected").text();
+            var codProduto = $("#cboProduto").val();
+            var quantidade = $("#txtQtd").val();
+            var valorCusto = $("#txtValorCurso").val();
+            var valorVenda = $("#txtValorVenda").val();
+
+            if (codProduto == "" || quantidade == "" || valorCusto == "" || valorVenda == "") {
+                alert("Todos os campos são obrigatórios");
+                return;
+            }
+
+            var linha = `<tr><td>${produto}<input type="hidden" name="ListaProdutos[${contador}].CodigoProduto" value="${codProduto}"></td>` +
+                `<td>${quantidade}<input type="hidden" name="ListaProdutos[${contador}].Quantidade" value="${quantidade}"></td>` +
+                `<td>${valorCusto}<input type="hidden" name="ListaProdutos[${contador}].ValorCusto" value="${valorCusto}"></td>` +
+                `<td>${valorVenda}<input type="hidden" name="ListaProdutos[${contador}].ValorVenda" value="${valorVenda}"></td>`;
+
+
+
+            $("#tabelaItens tbody").append(linha);
+            $("#cboProduto").val("");
+            $("#txtQtd").val("");
+            $("#txtValorCurso").val("");
+            $("#txtValorVenda").val("");
+
+
+        }
+    </script>
+}

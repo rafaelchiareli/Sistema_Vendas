@@ -11,10 +11,10 @@ namespace SIstema_Venda_SI.Controllers
         private ServiceCliente _ServiceCliente;
         public ClienteController()
         {
-            _ServiceCliente = new ServiceCliente(); 
+            _ServiceCliente = new ServiceCliente();
         }
 
-        public  IActionResult Index()
+        public IActionResult Index()
         {
             var listaClientesVM = ClienteVM.ListarTodosClientes();
             return View(listaClientesVM);
@@ -61,8 +61,8 @@ namespace SIstema_Venda_SI.Controllers
                 EndNumero = clienteVM.Numero,
 
             };
-            cliente = await _ServiceCliente.oRepositoryCliente.IncluirAsync(cliente);
-            endereco = await _ServiceCliente.oRepositoryEndereco.IncluirAsync(endereco);
+
+            await _ServiceCliente.oRepositoryCliente.IncluirAsync(cliente, endereco);
 
             return View(clienteVM);
         }

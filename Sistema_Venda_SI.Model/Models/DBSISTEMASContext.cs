@@ -2,7 +2,6 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.Security.AccessControl;
 using Microsoft.EntityFrameworkCore;
 
 namespace Sistema_Venda_SI.Model.Models;
@@ -13,13 +12,10 @@ public partial class DBSISTEMASContext : DbContext
         : base(options)
     {
     }
-
-
     public DBSISTEMASContext()
     {
             
     }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsbuilder)
 
 => optionsbuilder.UseSqlServer("data source=Localhost\\SQLEXPRESS;Initial Catalog=DBSISTEMAS;Integrated Security=True; TrustServerCertificate=True");
@@ -158,21 +154,21 @@ public partial class DBSISTEMASContext : DbContext
 
         modelBuilder.Entity<EntradaProduto>(entity =>
         {
-            entity.HasKey(e => e.EnpCodigoProduto);
+            entity.HasKey(e => e.EnpCodigoEntrada);
 
             entity.ToTable("ENTRADA_PRODUTO");
 
-            entity.Property(e => e.EnpCodigoProduto).ValueGeneratedNever();
+            entity.Property(e => e.EnpCodigoEntrada).ValueGeneratedNever();
             entity.Property(e => e.EnpValorCusto).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.EnpValorVenda).HasColumnType("decimal(18, 2)");
 
-            entity.HasOne(d => d.EnpCodigoEntradaNavigation).WithMany(p => p.EntradaProduto)
-                .HasForeignKey(d => d.EnpCodigoEntrada)
+            entity.HasOne(d => d.EnpCodigoEntradaNavigation).WithOne(p => p.EntradaProduto)
+                .HasForeignKey<EntradaProduto>(d => d.EnpCodigoEntrada)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ENTRADA_PRODUTO_ENTRADA");
 
-            entity.HasOne(d => d.EnpCodigoProdutoNavigation).WithOne(p => p.EntradaProduto)
-                .HasForeignKey<EntradaProduto>(d => d.EnpCodigoProduto)
+            entity.HasOne(d => d.EnpCodigoProdutoNavigation).WithMany(p => p.EntradaProduto)
+                .HasForeignKey(d => d.EnpCodigoProduto)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ENTRADA_PRODUTO_PRODUTO");
         });

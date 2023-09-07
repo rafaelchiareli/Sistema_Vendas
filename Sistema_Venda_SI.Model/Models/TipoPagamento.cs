@@ -2,17 +2,15 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Sistema_Venda_SI.Model.Models;
 
 public partial class TipoPagamento
 {
-    [Display(Name ="Código")]
     public int TpgCodigo { get; set; }
-    [Display(Name = "Descrição")]
+
     public string TpgDescricao { get; set; }
-    [Display(Name = "Desativado")]
+
     public bool TpgDesativado { get; set; }
 
     public virtual ICollection<Venda> Venda { get; set; } = new List<Venda>();

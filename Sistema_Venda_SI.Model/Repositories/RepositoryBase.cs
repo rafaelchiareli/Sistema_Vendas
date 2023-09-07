@@ -12,7 +12,7 @@ namespace Sistema_Venda_SI.Model.Repositories
     public class RepositoryBase<T> : IRepositoryBase<T>, IDisposable where T : class
     {
 
-        protected DBSISTEMASContext _context;
+        public DBSISTEMASContext _context;
         public bool _saveChanges = true;
 
         public RepositoryBase(bool saveChanges = true)

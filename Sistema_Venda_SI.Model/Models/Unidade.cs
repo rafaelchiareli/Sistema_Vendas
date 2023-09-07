@@ -2,17 +2,15 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Sistema_Venda_SI.Model.Models;
 
 public partial class Unidade
 {
-    [Display(Name = "Código")]
     public int UnCodigo { get; set; }
-    [Display(Name = "Descrição")]
+
     public string UnDescricao { get; set; }
-    [Display(Name = "Desativado")]
+
     public bool UnDesativado { get; set; }
 
     public virtual ICollection<Produto> Produto { get; set; } = new List<Produto>();
