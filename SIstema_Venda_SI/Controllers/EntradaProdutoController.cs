@@ -23,6 +23,7 @@ namespace SIstema_Venda_SI.Controllers
         {
             ViewBag.listaProdutos = _ServiceEntradaProduto.oRepositoryProduto.SelecionarTodos();
             return View();
+
         }
 
         [HttpPost]
@@ -47,6 +48,7 @@ namespace SIstema_Venda_SI.Controllers
                         EnpValorCusto = item.ValorCusto,
                         EnpValorVenda = item.ValorVenda,
                     };
+                    listaEntradaProduto.Add(entradaProduto);
                 }
 
                 await _ServiceEntradaProduto.oRepositoryEntradaProduto.IncluirAsync(entrada, listaEntradaProduto);
