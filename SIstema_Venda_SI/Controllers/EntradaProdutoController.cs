@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.View;
 using Sistema_Venda_SI.Model.Models;
 using Sistema_Venda_SI.Model.Service;
@@ -16,12 +17,23 @@ namespace SIstema_Venda_SI.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            var listaEntradaProdutoVM = EntradaProdutoVM.ListarTodasEntradas();
+            return View(listaEntradaProdutoVM);
         }
 
-        public  IActionResult Create()
+        public void CarregaListaProdutos()
         {
             ViewBag.listaProdutos = _ServiceEntradaProduto.oRepositoryProduto.SelecionarTodos();
+        }
+        public IActionResult Create(int codEntrada = 0)
+        {
+            CarregaListaProdutos();
+            if (codEntrada > 0)
+            {
+                var entradaProdutoVm = EntradaProdutoVM.SelecionarEntradaProdutoVM(codEntrada);
+                return View(entradaProdutoVm);
+
+            }
             return View();
 
         }
@@ -29,14 +41,20 @@ namespace SIstema_Venda_SI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(EntradaProdutoVM entradaProdutoVM)
         {
-
+            var alterar = false;
             try
             {
+                if (entradaProdutoVM.EntCodigo > 0)
+                {
+                    alterar = true;
+                }
                 var entrada = new Entrada()
                 {
                     EntDataHora = entradaProdutoVM.EntDataHora,
                     EnNuneroNotaFiscal = entradaProdutoVM.EnNuneroNotaFiscal,
                 };
+             
+
 
                 var listaEntradaProduto = new List<EntradaProduto>();
                 foreach (var item in entradaProdutoVM.ListaProdutos)
@@ -50,8 +68,20 @@ namespace SIstema_Venda_SI.Controllers
                     };
                     listaEntradaProduto.Add(entradaProduto);
                 }
+                if (alterar)
+                {
+                    var entradAlterar = _ServiceEntradaProduto.oRepositoryEntrada.SelecionarPk(entradaProdutoVM.EntCodigo);
 
-                await _ServiceEntradaProduto.oRepositoryEntradaProduto.IncluirAsync(entrada, listaEntradaProduto);
+                    entradAlterar.EnNuneroNotaFiscal = entradaProdutoVM.EnNuneroNotaFiscal;
+                    entradAlterar.EntDataHora = entradaProdutoVM.EntDataHora;
+                     _ServiceEntradaProduto.oRepositoryEntrada.AlterarAsync(entradAlterar, listaEntradaProduto);
+
+                }
+                else
+                {
+
+                    await _ServiceEntradaProduto.oRepositoryEntrada.IncluirAsync(entrada, listaEntradaProduto);
+                }
 
                 return View();
             }
@@ -61,7 +91,7 @@ namespace SIstema_Venda_SI.Controllers
                 throw;
             }
 
-          
+
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using Sistema_Venda_SI.Model.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Sistema_Venda_SI.Model.Models;
 using SIstema_Venda_SI.Models;
 
 namespace SIstema_Venda_SI.ViewModel
@@ -12,11 +13,24 @@ namespace SIstema_Venda_SI.ViewModel
                 
         }
 
+
+        public static EntradaProdutoVM SelecionarEntradaProdutoVM(int codEntrada)
+        {
+            var db = new DBSISTEMASContext();
+            var entrada = db.Entrada.AsNoTracking().FirstOrDefault(x => x.EntCodigo == codEntrada);
+
+            var retorno = new EntradaProdutoVM();
+            retorno.EnNuneroNotaFiscal = entrada.EnNuneroNotaFiscal;
+            retorno.EntCodigo = entrada.EntCodigo;
+            retorno.EntDataHora = entrada.EntDataHora;
+            retorno.ListaProdutos = ItensEntrada.ListarItensEntrada(codEntrada);
+            return retorno;
+        }
         public static List<EntradaProdutoVM> ListarTodasEntradas()
         {
             var db  = new DBSISTEMASContext();
             var listaRetorno = new List<EntradaProdutoVM>();
-            var listaEntradas = db.Entrada.ToList();
+            var listaEntradas = db.Entrada.AsNoTracking().ToList();
             foreach (var item in listaEntradas)
             {
                 var entradProdutoVM = new EntradaProdutoVM()

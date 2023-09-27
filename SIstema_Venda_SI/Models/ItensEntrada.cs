@@ -1,4 +1,5 @@
-﻿using Sistema_Venda_SI.Model.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Sistema_Venda_SI.Model.Models;
 using System.Net.WebSockets;
 
 namespace SIstema_Venda_SI.Models
@@ -23,7 +24,7 @@ namespace SIstema_Venda_SI.Models
             var db = new DBSISTEMASContext();
 
             var listaRetorno = new List<ItensEntrada>();
-            var entradaProdutos = db.EntradaProduto.Where(x => x.EnpCodigoEntrada == codEntrada).ToList();
+            var entradaProdutos = db.EntradaProduto.AsNoTracking().Where(x => x.EnpCodigoEntrada == codEntrada).ToList();
             foreach (var item in entradaProdutos)
             {
                var itensEntrada = new ItensEntrada()
