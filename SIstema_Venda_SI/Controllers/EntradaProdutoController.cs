@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.View;
 using Sistema_Venda_SI.Model.Models;
 using Sistema_Venda_SI.Model.Service;
 using SIstema_Venda_SI.ViewModel;
+using System.Reflection.Metadata.Ecma335;
 
 namespace SIstema_Venda_SI.Controllers
 {
@@ -38,6 +39,35 @@ namespace SIstema_Venda_SI.Controllers
 
         }
 
+        public IActionResult Delete(int codEntrada)
+        {
+            var entradaProdutoVM = EntradaProdutoVM.SelecionarEntradaProdutoVM(codEntrada);
+            return View(entradaProdutoVM);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(EntradaProdutoVM entradaProdutoVM)
+        {
+            try
+            {
+                _ServiceEntradaProduto.oRepositoryEntrada.Excluir(entradaProdutoVM.EntCodigo);
+                return RedirectToAction("Index");
+
+            }
+            catch (Exception ex)
+            {
+                ViewData["MensagemErro"] = ex.Message.ToString();
+                throw;
+            }
+        }
+
+
+        public IActionResult Details(int codEntrada)
+        {
+            var entradaProdutoVM = EntradaProdutoVM.SelecionarEntradaProdutoVM(codEntrada);
+            return View(entradaProdutoVM);
+
+        }
         [HttpPost]
         public async Task<IActionResult> Create(EntradaProdutoVM entradaProdutoVM)
         {
@@ -53,8 +83,8 @@ namespace SIstema_Venda_SI.Controllers
                     EntDataHora = entradaProdutoVM.EntDataHora,
                     EnNuneroNotaFiscal = entradaProdutoVM.EnNuneroNotaFiscal,
                 };
-             
 
+                EntradaProdutoVM entradaProdutoSalva;
 
                 var listaEntradaProduto = new List<EntradaProduto>();
                 foreach (var item in entradaProdutoVM.ListaProdutos)
@@ -74,16 +104,19 @@ namespace SIstema_Venda_SI.Controllers
 
                     entradAlterar.EnNuneroNotaFiscal = entradaProdutoVM.EnNuneroNotaFiscal;
                     entradAlterar.EntDataHora = entradaProdutoVM.EntDataHora;
-                     _ServiceEntradaProduto.oRepositoryEntrada.AlterarAsync(entradAlterar, listaEntradaProduto);
+                    _ServiceEntradaProduto.oRepositoryEntrada.AlterarAsync(entradAlterar, listaEntradaProduto);
 
+                    entradaProdutoSalva = EntradaProdutoVM.SelecionarEntradaProdutoVM(entradaProdutoVM.EntCodigo);
                 }
                 else
                 {
 
                     await _ServiceEntradaProduto.oRepositoryEntrada.IncluirAsync(entrada, listaEntradaProduto);
+                    entradaProdutoSalva = EntradaProdutoVM.SelecionarEntradaProdutoVM(entrada.EntCodigo);
                 }
 
-                return View();
+                ViewData["Mensagem"] = "Dados salvos com sucesso!";
+                return View(entradaProdutoSalva);
             }
             catch (Exception ex)
             {

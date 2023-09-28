@@ -8,17 +8,15 @@ namespace Sistema_Venda_SI.Model.Models;
 
 public partial class DBSISTEMASContext : DbContext
 {
+    public DBSISTEMASContext()
+    {
+    }
+
     public DBSISTEMASContext(DbContextOptions<DBSISTEMASContext> options)
         : base(options)
     {
     }
-    public DBSISTEMASContext()
-    {
-            
-    }
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsbuilder)
 
-=> optionsbuilder.UseSqlServer("data source=Localhost\\SQLEXPRESS;Initial Catalog=DBSISTEMAS;Integrated Security=True; TrustServerCertificate=True");
     public virtual DbSet<Cliente> Cliente { get; set; }
 
     public virtual DbSet<Configuracao> Configuracao { get; set; }
@@ -28,6 +26,8 @@ public partial class DBSISTEMASContext : DbContext
     public virtual DbSet<Entrada> Entrada { get; set; }
 
     public virtual DbSet<EntradaProduto> EntradaProduto { get; set; }
+
+    public virtual DbSet<ItensVenda> ItensVenda { get; set; }
 
     public virtual DbSet<Parcelas> Parcelas { get; set; }
 
@@ -40,6 +40,10 @@ public partial class DBSISTEMASContext : DbContext
     public virtual DbSet<Unidade> Unidade { get; set; }
 
     public virtual DbSet<Venda> Venda { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-H431MKR\\SQLEXPRESS;Initial Catalog=DBSISTEMAS;Integrated Security=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -154,23 +158,40 @@ public partial class DBSISTEMASContext : DbContext
 
         modelBuilder.Entity<EntradaProduto>(entity =>
         {
-            entity.HasKey(e => e.EnpCodigoEntrada);
+            entity.HasKey(e => e.EnpCodigo);
 
             entity.ToTable("ENTRADA_PRODUTO");
 
-            entity.Property(e => e.EnpCodigoEntrada).ValueGeneratedNever();
             entity.Property(e => e.EnpValorCusto).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.EnpValorVenda).HasColumnType("decimal(18, 2)");
 
-            entity.HasOne(d => d.EnpCodigoEntradaNavigation).WithOne(p => p.EntradaProduto)
-                .HasForeignKey<EntradaProduto>(d => d.EnpCodigoEntrada)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ENTRADA_PRODUTO_ENTRADA");
+            entity.HasOne(d => d.EnpCodigoEntradaNavigation).WithMany(p => p.EntradaProduto)
+                .HasForeignKey(d => d.EnpCodigoEntrada)
+                .HasConstraintName("FK_ENTRADA_PRODUTO_ENTRADA1");
 
             entity.HasOne(d => d.EnpCodigoProdutoNavigation).WithMany(p => p.EntradaProduto)
                 .HasForeignKey(d => d.EnpCodigoProduto)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ENTRADA_PRODUTO_PRODUTO");
+                .HasConstraintName("FK_ENTRADA_PRODUTO_PRODUTO1");
+        });
+
+        modelBuilder.Entity<ItensVenda>(entity =>
+        {
+            entity.HasKey(e => e.ItvCodigo).HasName("PK_ITENS_VENDA_1");
+
+            entity.ToTable("ITENS_VENDA");
+
+            entity.Property(e => e.ItvQuantidade).HasColumnType("decimal(18, 0)");
+
+            entity.HasOne(d => d.ItvCodigoProdutoNavigation).WithMany(p => p.ItensVenda)
+                .HasForeignKey(d => d.ItvCodigoProduto)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ITENS_VENDA_PRODUTO");
+
+            entity.HasOne(d => d.ItvCodigoVendaNavigation).WithMany(p => p.ItensVenda)
+                .HasForeignKey(d => d.ItvCodigoVenda)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ITENS_VENDA_VENDA");
         });
 
         modelBuilder.Entity<Parcelas>(entity =>
@@ -270,23 +291,6 @@ public partial class DBSISTEMASContext : DbContext
                 .HasForeignKey(d => d.VenCodigoTipoPagamento)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_VENDA_TIPO_PAGAMENTO");
-
-            entity.HasMany(d => d.ItvCodigoProduto).WithMany(p => p.ItvCodigoVenda)
-                .UsingEntity<Dictionary<string, object>>(
-                    "ItensVenda",
-                    r => r.HasOne<Produto>().WithMany()
-                        .HasForeignKey("ItvCodigoProduto")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_ITENS_VENDA_PRODUTO"),
-                    l => l.HasOne<Venda>().WithMany()
-                        .HasForeignKey("ItvCodigoVenda")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_ITENS_VENDA_VENDA"),
-                    j =>
-                    {
-                        j.HasKey("ItvCodigoVenda", "ItvCodigoProduto");
-                        j.ToTable("ITENS_VENDA");
-                    });
         });
 
         OnModelCreatingPartial(modelBuilder);

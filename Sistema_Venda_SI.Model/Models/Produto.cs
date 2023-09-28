@@ -23,9 +23,9 @@ public partial class Produto
 
     public virtual ICollection<EntradaProduto> EntradaProduto { get; set; } = new List<EntradaProduto>();
 
+    public virtual ICollection<ItensVenda> ItensVenda { get; set; } = new List<ItensVenda>();
+
     public virtual TipoProduto ProCodigoTipoProdutoNavigation { get; set; }
 
     public virtual Unidade ProCodigoUnidadeNavigation { get; set; }
-
-    public virtual ICollection<Venda> ItvCodigoVenda { get; set; } = new List<Venda>();
 }

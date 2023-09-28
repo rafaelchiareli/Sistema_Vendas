@@ -1,0 +1,101 @@
+﻿@model SIstema_Venda_SI.ViewModel.EntradaProdutoVM
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>0
+<form asp-action="Delete">
+    <div>
+        @{
+            if (ViewData["MensagemErro"] != null)
+            {
+                <div class="alert-danger">
+                    @ViewData["MensagemErro"]
+                </div>
+            }
+        }
+        <h4>EntradaProdutoVM</h4>
+        <hr />
+        <dl class="row">
+
+            <input type="hidden" asp-for="EntCodigo" />
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.EntDataHora)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.EntDataHora)
+            </dd>
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.EnNuneroNotaFiscal)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.EnNuneroNotaFiscal)
+            </dd>
+        </dl>
+        <div>
+            <div>
+                <h2>Produtos</h2>
+                <div>
+                    <table class="table" id="tabelaItens">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Produto
+                                </th>
+                                <th>
+                                    Quantidade
+                                </th>
+                                <th>
+                                    Valor Custo
+                                </th>
+                                <th>
+                                    Valor Venda
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                if (Model != null && Model.ListaProdutos != null)
+                                {
+
+
+                                    for (int i = 0; i <= Model.ListaProdutos.Count - 1; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Model.ListaProdutos[i].NomeProduto
+                                                <input type="hidden" name="ListaProdutos[@i].CodigoProduto" value="@Model.ListaProdutos[i].CodigoProduto">
+                                            </td>
+                                            <td>
+                                                @Model.ListaProdutos[i].Quantidade
+                                                <input type="hidden" value="@Model.ListaProdutos[i].Quantidade" name="ListaProdutos[@i].Quantidade">
+                                            </td>
+                                            <td>
+
+                                                @Model.ListaProdutos[i].ValorCusto
+                                                <input type="hidden" value="@Model.ListaProdutos[i].ValorCusto" name="Model.ListaProdutos[@i].ValorCusto">
+                                            </td>
+                                            <td>
+
+                                                @Model.ListaProdutos[i].ValorVenda
+                                                <input type="hidden" value="@Model.ListaProdutos[i].ValorVenda" name="Model.ListaProdutos[@i].ValorVenda">
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+</form>
+

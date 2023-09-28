@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Sistema_Venda_SI.Model.Repositories
 {
@@ -15,6 +16,15 @@ namespace Sistema_Venda_SI.Model.Repositories
         }
 
 
+        public void ExcluirEntradaeProdutos(int codEntrada)
+        {
+            var listaEntradaProduto = _context.EntradaProduto.Where( x => x.EnpCodigoEntrada == codEntrada ).ToList(); 
+            _context.RemoveRange(listaEntradaProduto);
+            _context.SaveChanges();
+            var entrada = _context.Entrada.Find(codEntrada);
+            _context.Entry(entrada).State= Microsoft.EntityFrameworkCore.EntityState.Deleted;
+            _context.SaveChanges();
+        }
         public void AlterarAsync(Entrada entrada, List<EntradaProduto> listaEntradaProduto)
         {
             _context.Entry(entrada).State = Microsoft.EntityFrameworkCore.EntityState.Modified;

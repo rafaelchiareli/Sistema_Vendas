@@ -33,13 +33,16 @@ namespace SIstema_Venda_SI.ViewModel
             var listaEntradas = db.Entrada.AsNoTracking().ToList();
             foreach (var item in listaEntradas)
             {
+                
+                var itens = new List<ItensEntrada>();
+                itens = ItensEntrada.ListarItensEntrada(item.EntCodigo);
                 var entradProdutoVM = new EntradaProdutoVM()
                 {
                     EnNuneroNotaFiscal = item.EnNuneroNotaFiscal,
                     EntCodigo = item.EntCodigo,
                     EntDataHora = item.EntDataHora,
                     EntUsuario = item.EntUsuario,
-                    ListaProdutos = ItensEntrada.ListarItensEntrada(item.EntCodigo),
+                    ListaProdutos = itens
 
                 };
                 listaRetorno.Add(entradProdutoVM);

@@ -19,11 +19,11 @@ public partial class Venda
 
     public int? VenQtdParcelas { get; set; }
 
+    public virtual ICollection<ItensVenda> ItensVenda { get; set; } = new List<ItensVenda>();
+
     public virtual ICollection<Parcelas> Parcelas { get; set; } = new List<Parcelas>();
 
     public virtual Cliente VenCodigoClienteNavigation { get; set; }
 
     public virtual TipoPagamento VenCodigoTipoPagamentoNavigation { get; set; }
-
-    public virtual ICollection<Produto> ItvCodigoProduto { get; set; } = new List<Produto>();
 }

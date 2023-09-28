@@ -48,11 +48,20 @@ namespace Sistema_Venda_SI.Model.Repositories
 
         public void Excluir(T obj)
         {
-            _context.Set<T>().Remove(obj);
-            if (_saveChanges)
+            try
             {
-                _context.SaveChanges();
+                _context.Set<T>().Remove(obj);
+                if (_saveChanges)
+                {
+                    _context.SaveChanges();
+                }
             }
+            catch (Exception)
+            {
+
+                throw ;
+            }
+         
         }
 
         public void Excluir(params object[] variavel)

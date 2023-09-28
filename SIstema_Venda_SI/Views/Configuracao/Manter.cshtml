@@ -1,0 +1,59 @@
+﻿@model Sistema_Venda_SI.Model.Models.Configuracao
+
+@{
+    ViewData["Title"] = "Manter";
+}
+
+<h1>Manter</h1>
+
+<h4>Configuracao</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Manter">
+            @{
+                if (ViewData["Mensagem"] != null)
+                {
+                    <div class="alert-success">
+                        @ViewData["Mensagem"]
+                    </div>
+                }
+            }
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+            
+                <input type="hidden" asp-for="CfgCodigo" class="form-control" />
+              
+            </div>
+            <div class="form-group">
+                <label asp-for="CfgMargemLucro" class="control-label"></label>
+                <input asp-for="CfgMargemLucro" class="form-control" />
+                <span asp-validation-for="CfgMargemLucro" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CfgAcrescimoCartao" class="control-label"></label>
+                <input asp-for="CfgAcrescimoCartao" class="form-control" />
+                <span asp-validation-for="CfgAcrescimoCartao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CfgDescontoAvista" class="control-label"></label>
+                <input asp-for="CfgDescontoAvista" class="form-control" />
+                <span asp-validation-for="CfgDescontoAvista" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CfgUsuarioAlteracao" class="control-label"></label>
+                <input asp-for="CfgUsuarioAlteracao" class="form-control" />
+                <span asp-validation-for="CfgUsuarioAlteracao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

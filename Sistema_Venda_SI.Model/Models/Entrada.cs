@@ -15,5 +15,5 @@ public partial class Entrada
 
     public string EnNuneroNotaFiscal { get; set; }
 
-    public virtual EntradaProduto EntradaProduto { get; set; }
+    public virtual ICollection<EntradaProduto> EntradaProduto { get; set; } = new List<EntradaProduto>();
 }

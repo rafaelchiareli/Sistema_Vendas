@@ -17,6 +17,8 @@ public partial class EntradaProduto
 
     public int EnpQuantidade { get; set; }
 
+    public int EnpCodigo { get; set; }
+
     public virtual Entrada EnpCodigoEntradaNavigation { get; set; }
 
     public virtual Produto EnpCodigoProdutoNavigation { get; set; }
