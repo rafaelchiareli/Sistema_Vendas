@@ -62,6 +62,10 @@
       {
          "Name": "[dbo].[VENDA]",
          "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VW_ESTOQUE]",
+         "ObjectType": 3
       }
    ],
    "UiHint": "desktop-h431mkr\\sqlexpress.DBSISTEMAS.dbo",

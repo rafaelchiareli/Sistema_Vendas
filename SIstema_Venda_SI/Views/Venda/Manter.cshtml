@@ -1,0 +1,151 @@
+﻿@model SIstema_Venda_SI.ViewModel.VendaVM
+
+@{
+    ViewData["Title"] = "Manter";
+}
+
+<h1>Manter</h1>
+
+<h4>VendaVM</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Manter">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+            <input type="hidden" asp-for="CodigoVenda" class="form-control" />
+
+            <div style="display: flex;width:100%">
+
+                <div class="form-group col-md-5">
+                    <label asp-for="DataVenda" class="control-label"></label>
+                    <input type="date" asp-for="DataVenda" class="form-control" />
+                    <span asp-validation-for="DataVenda" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-7">
+                    <label asp-for="CodigoCliente" class="control-label"></label>
+                    <select class="form-select" asp-for="CodigoCliente" asp-items="@ViewBag.CodigoCliente">
+                        <option selected value="">Selecione um Cliente</option>
+                    </select>
+
+                </div>
+            </div>
+
+            <div style="display: flex">
+                <div class="form-group col-md-5">
+                    <label asp-for="CodigoTipoPagamento" class="control-label"></label>
+                    <select class="form-select" asp-for="CodigoTipoPagamento" asp-items="@ViewBag.CodigoTipoPagamento">
+                        <option selected value="">Selecione um Tipo de Pagamento</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-md-7" id="divParcelas" style="display:none">
+                    <label asp-for="QtdParcelas" class="control-label"></label>
+                    <input asp-for="QtdParcelas" class="form-control" />
+                    <span asp-validation-for="QtdParcelas" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Produto</label>
+                <select class="form-select" id="cboProduto">
+                    <option selected value="">Selecione um produto</option>
+                    @{
+                        foreach (VwEstoque produto in ViewBag.listaProdutos)
+                        {
+                            <option data-qtd="@produto.Quantidade" data-valor="@produto.Valorvenda" value="@produto.Procodigo">@produto.ProDescricao</option>
+
+                        }
+                    }
+                </select>
+                <div>
+                    <label class="form-label">Quantidade</label>
+                    <input type="text" id="txtQuantidade" class="form-control" />
+                </div>
+                <div>
+                    <label class="form-label">Valor de Venda</label>
+                    <input type="text" id="txtValor" class="form-control" readonly />
+                </div>
+                <button type="button" class="btn btn-primary adicionar">Adicionar</button>
+            </div>
+            <div>
+                <table id="tbProdutos" class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Produto
+                            </th>
+                            <th>
+                                Quantidade
+                            </th>
+                            <th>
+                                Valor
+                            </th>
+                            <th>
+                                Total
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <button class="btn btn-outline-success">Salvar</button>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+
+        $("#CodigoTipoPagamento").on("change", function () {
+            if ($(this).val() == 2) {
+                $("#divParcelas").css("display", "block");
+            } else {
+                $("#divParcelas").css("display", "none");
+            }
+        });
+
+        $(".adicionar").on("click", function () {
+            var quantidadeEstoque = $("#cboProduto option:selected").attr("data-qtd");
+          
+            var quantidade = $("#txtQuantidade").val();
+            console.log('qtdEstoque', quantidadeEstoque, 'qtd', quantidade);
+            var valorVenda = $("#txtValor").val();
+            if (parseInt(quantidade) > parseInt(quantidadeEstoque)) {
+                alert('A quantidade não pode ser maior que o estoque.');
+            } else {
+                var valorTotal = parseFloat(valorVenda) * parseInt(quantidade);
+                var produto = $("#cboProduto option:selected").text();
+                var codProduto = $("#cboProduto").val();
+                var contador = $("#tbProdutos tbody tr").length;
+                
+                var linha = `<tr>` +
+                    `<td><input type="hidden" name="ListaProdutos[${contador}].CodigoProduto" value=${codProduto} />${produto}</td>` +
+                    `<td><input type="hidden" name="ListaProdutos[${contador}].Quantidade" value=${quantidade} />${quantidade}</td>` +
+                    `<td><input type="hidden" name="ListaProdutos[${contador}].ValorVenda" value=${valorVenda} />${valorVenda}</td>` +
+                    `<td>${valorTotal}</td>` +
+                    `</tr>`;
+
+                $("#tbProdutos tbody").append(linha);
+                $("#cboProduto option:selected").attr("data-qtd", parseInt(quantidadeEstoque) - parseInt(quantidade));
+            }
+        })
+
+        $("#cboProduto").on("change", function () {
+
+            $("#txtValor").val($("#cboProduto option:selected").attr("data-valor"));
+
+
+        })
+    </script>
+
+}
