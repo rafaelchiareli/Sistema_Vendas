@@ -13,7 +13,8 @@ namespace Sistema_Venda_SI.Model.Service
         public RepositoryItensVenda oRepositoryItensVenda { get; set; }
         public RepositoryCliente oRepositoryCliente { get; set; }
         public RepositoryTipoPagamento oRepositoryTipoPagamento { get; set; }
-        public RepositoryVwEstoque oRepositoryVwEstoque { get; set; }   
+        public RepositoryVwEstoque oRepositoryVwEstoque { get; set; }  
+        public RepositoryConfiguracao oRepositoryConfiguracao { get; set; }
         public ServiceVenda()
         {
             oRepositoryVenda = new RepositoryVenda();
@@ -21,6 +22,7 @@ namespace Sistema_Venda_SI.Model.Service
             oRepositoryCliente = new RepositoryCliente();
             oRepositoryTipoPagamento  = new RepositoryTipoPagamento();
             oRepositoryVwEstoque = new RepositoryVwEstoque();
+            oRepositoryConfiguracao = new RepositoryConfiguracao();
         }
 
     }

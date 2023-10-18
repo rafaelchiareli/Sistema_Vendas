@@ -15,7 +15,7 @@ public partial class Parcelas
 
     public decimal? ParValorParcela { get; set; }
 
-    public decimal? ParDataVencimento { get; set; }
+    public DateTime? ParDataVencimento { get; set; }
 
     public DateTime? ParDataPagamento { get; set; }
 

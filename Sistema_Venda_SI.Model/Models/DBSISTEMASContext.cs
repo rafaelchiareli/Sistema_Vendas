@@ -204,7 +204,7 @@ public partial class DBSISTEMASContext : DbContext
             entity.ToTable("PARCELAS");
 
             entity.Property(e => e.ParDataPagamento).HasColumnType("datetime");
-            entity.Property(e => e.ParDataVencimento).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.ParDataVencimento).HasColumnType("datetime");
             entity.Property(e => e.ParValorParcela).HasColumnType("decimal(18, 2)");
 
             entity.HasOne(d => d.ParCodigoVendaNavigation).WithMany(p => p.Parcelas)

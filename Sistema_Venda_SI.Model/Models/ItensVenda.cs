@@ -14,7 +14,7 @@ public partial class ItensVenda
     public int ItvCodigo { get; set; }
 
     public decimal? ItvQuantidade { get; set; }
-
+    public decimal? ItvValorItem { get; set; }
     public virtual Produto ItvCodigoProdutoNavigation { get; set; }
 
     public virtual Venda ItvCodigoVendaNavigation { get; set; }

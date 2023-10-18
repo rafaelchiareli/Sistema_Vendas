@@ -1,16 +1,20 @@
 ﻿@model SIstema_Venda_SI.ViewModel.VendaVM
 
 @{
-    ViewData["Title"] = "Manter";
+    ViewData["Title"] = "Vendas";
 }
 
-<h1>Manter</h1>
+<h1>Vendas</h1>
 
-<h4>VendaVM</h4>
+<h4>Venda de Produtos</h4> 
+
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Manter">
+            <div>
+                <label class="form-label">Valor Total: </label><label class="form-label" name="lblValor" id="lblValor">0</label>
+            </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 
@@ -88,6 +92,7 @@
                             <th>
                                 Total
                             </th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -107,16 +112,20 @@
     <script>
 
         $("#CodigoTipoPagamento").on("change", function () {
-            if ($(this).val() == 2) {
+            if ($(this).val() == 4) {
                 $("#divParcelas").css("display", "block");
             } else {
                 $("#divParcelas").css("display", "none");
             }
         });
 
+        $(".remover").on("click", function () {
+            $(this).closest("tr").remove();
+        });
+
         $(".adicionar").on("click", function () {
             var quantidadeEstoque = $("#cboProduto option:selected").attr("data-qtd");
-          
+
             var quantidade = $("#txtQuantidade").val();
             console.log('qtdEstoque', quantidadeEstoque, 'qtd', quantidade);
             var valorVenda = $("#txtValor").val();
@@ -127,7 +136,7 @@
                 var produto = $("#cboProduto option:selected").text();
                 var codProduto = $("#cboProduto").val();
                 var contador = $("#tbProdutos tbody tr").length;
-                
+
                 var linha = `<tr>` +
                     `<td><input type="hidden" name="ListaProdutos[${contador}].CodigoProduto" value=${codProduto} />${produto}</td>` +
                     `<td><input type="hidden" name="ListaProdutos[${contador}].Quantidade" value=${quantidade} />${quantidade}</td>` +
@@ -137,6 +146,9 @@
 
                 $("#tbProdutos tbody").append(linha);
                 $("#cboProduto option:selected").attr("data-qtd", parseInt(quantidadeEstoque) - parseInt(quantidade));
+                var valorTotalAtual = parseFloat($("#lblValor").text()) + valorTotal;
+                $("#lblValor").text(valorTotalAtual);
+                
             }
         })
 
@@ -146,6 +158,8 @@
 
 
         })
+
+
     </script>
 
 }

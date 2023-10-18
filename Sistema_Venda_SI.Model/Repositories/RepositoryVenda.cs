@@ -9,7 +9,7 @@ namespace Sistema_Venda_SI.Model.Repositories
 {
     public class RepositoryVenda: RepositoryBase<Venda>
     {
-        public RepositoryVenda(bool saveChanges = false) : base(saveChanges)
+        public RepositoryVenda(bool saveChanges = true) : base(saveChanges)
         {
 
         }

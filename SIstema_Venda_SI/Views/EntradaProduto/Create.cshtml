@@ -144,18 +144,15 @@
 
         function adicionar() {
             var contador = $("#tabelaItens tbody tr").length;
-
             var produto = $("#cboProduto option:selected").text();
             var codProduto = $("#cboProduto").val();
             var quantidade = $("#txtQtd").val();
             var valorCusto = $("#txtValorCurso").val();
             var valorVenda = $("#txtValorVenda").val();
-
             if (codProduto == "" || quantidade == "" || valorCusto == "" || valorVenda == "") {
                 alert("Todos os campos são obrigatórios");
                 return;
             }
-
             var linha = `<tr><td>${produto}<input type="hidden" name="ListaProdutos[${contador}].CodigoProduto" value="${codProduto}"></td>` +
                 `<td>${quantidade}<input type="hidden" name="ListaProdutos[${contador}].Quantidade" value="${quantidade}"></td>` +
                 `<td>${valorCusto}<input type="hidden" name="ListaProdutos[${contador}].ValorCusto" value="${valorCusto}"></td>` +
