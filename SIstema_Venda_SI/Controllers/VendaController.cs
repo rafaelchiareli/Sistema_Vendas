@@ -20,9 +20,14 @@ namespace SIstema_Venda_SI.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            
+            return View(VendaVM.ListarTodos());
         }
 
+        public IActionResult GetConfiguracao()
+        {
+            return Ok(configuracao);
+        }
         public void CarregaViewBag()
         {
 
@@ -30,9 +35,13 @@ namespace SIstema_Venda_SI.Controllers
             ViewData["CodigoTipoPagamento"] = new SelectList(_ServiceVenda.oRepositoryTipoPagamento.SelecionarTodos(), "TpgCodigo", "TpgDescricao");
             ViewBag.listaProdutos = _ServiceVenda.oRepositoryVwEstoque.SelecionarTodos();
         }
-        public IActionResult Manter()
+        public IActionResult Manter(int codVenda = 0)
         {
             CarregaViewBag();
+            if (codVenda > 0)
+            {
+                return View(VendaVM.SelecionarVenda(codVenda));
+            }
             return View();
         }
         [HttpPost]
@@ -84,8 +93,10 @@ namespace SIstema_Venda_SI.Controllers
                     venda.Parcelas = listaParcelas;
                 }
                 await _ServiceVenda.oRepositoryVenda.IncluirAsync(venda);
+                vendaVM.CodigoVenda = venda.VenCodigo;
+            
                 CarregaViewBag();
-                return View();
+                return View(vendaVM);
             }
             catch (Exception ex)
             {

@@ -6,7 +6,7 @@
 
 <h1>Vendas</h1>
 
-<h4>Venda de Produtos</h4> 
+<h4>Venda de Produtos</h4>
 
 <hr />
 <div class="row">
@@ -95,6 +95,35 @@
 
                         </tr>
                     </thead>
+                    @{
+                        if (Model != null && Model.ListaProdutos != null)
+                        {
+                            int contador = 0;
+                            foreach (var item in Model.ListaProdutos)
+                            {
+                                var valorTotal = item.Quantidade * item.ValorVenda;
+                                <tr>
+                                    <td>
+                                        <input type="hidden" name="ListaProdutos[@contador].CodigoProduto" value="@item.CodigoProduto" />
+                                        <input type="hidden" name="ListaProdutos[@contador].Produto" value="@item.Produto" />
+                                        @item.Produto
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="ListaProdutos[@contador].Quantidade" value="@item.Quantidade" />
+                                        @item.Quantidade
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="ListaProdutos[@contador].ValorVenda" value="@item.ValorVenda" />
+                                        @item.ValorVenda
+                                    </td>
+                                    <td>
+                                        @valorTotal
+                                    </td>
+                                </tr>
+                                contador += 1;
+                            }
+                        }
+                    }
                     <tbody>
                     </tbody>
                 </table>
@@ -110,6 +139,17 @@
 
 @section Scripts {
     <script>
+        var urlConfiguracao = "@Url.Action("GetConfiguracao","Venda")";
+        var acredimoCartao;
+        var descontoAvista;
+
+    </script>
+    <script>
+
+        $.get(urlConfiguracao, function (data) {
+            descontoAvista = data.cfgDescontoAvista;
+            acredimoCartao = data.cfgAcrescimoCartao;
+        })
 
         $("#CodigoTipoPagamento").on("change", function () {
             if ($(this).val() == 4) {
@@ -128,17 +168,26 @@
 
             var quantidade = $("#txtQuantidade").val();
             console.log('qtdEstoque', quantidadeEstoque, 'qtd', quantidade);
-            var valorVenda = $("#txtValor").val();
+            var valorVenda = $("#txtValor").val().replace(".",",");
             if (parseInt(quantidade) > parseInt(quantidadeEstoque)) {
                 alert('A quantidade não pode ser maior que o estoque.');
             } else {
-                var valorTotal = parseFloat(valorVenda) * parseInt(quantidade);
+
+                var valorTotal = parseFloat(valorVenda.replace(",",".")) * parseInt(quantidade);
+
+
+
+
+
                 var produto = $("#cboProduto option:selected").text();
                 var codProduto = $("#cboProduto").val();
                 var contador = $("#tbProdutos tbody tr").length;
 
                 var linha = `<tr>` +
-                    `<td><input type="hidden" name="ListaProdutos[${contador}].CodigoProduto" value=${codProduto} />${produto}</td>` +
+                    `<td>` +
+                    `<input type="hidden" name="ListaProdutos[${contador}].CodigoProduto" value=${codProduto} />${produto}` +
+                    `<input type="hidden" name="ListaProdutos[${contador}].Produto" value=${produto} />` +
+                    ` </td>` +
                     `<td><input type="hidden" name="ListaProdutos[${contador}].Quantidade" value=${quantidade} />${quantidade}</td>` +
                     `<td><input type="hidden" name="ListaProdutos[${contador}].ValorVenda" value=${valorVenda} />${valorVenda}</td>` +
                     `<td>${valorTotal}</td>` +
@@ -148,13 +197,24 @@
                 $("#cboProduto option:selected").attr("data-qtd", parseInt(quantidadeEstoque) - parseInt(quantidade));
                 var valorTotalAtual = parseFloat($("#lblValor").text()) + valorTotal;
                 $("#lblValor").text(valorTotalAtual);
-                
+
             }
         })
 
         $("#cboProduto").on("change", function () {
+            var tipoPagamento = $("#CodigoTipoPagamento").val();
+            var valorItem = parseFloat($("#cboProduto option:selected").attr("data-valor"));
+            switch (tipoPagamento) {
+                case '2':
+                    valorItem += valorItem * (acredimoCartao / 100);
 
-            $("#txtValor").val($("#cboProduto option:selected").attr("data-valor"));
+                    break;
+                case '3':
+                    valorItem -= valorItem * (descontoAvista / 100);
+
+                    break;
+            }
+            $("#txtValor").val(valorItem);
 
 
         })
