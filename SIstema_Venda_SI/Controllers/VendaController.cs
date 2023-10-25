@@ -20,7 +20,7 @@ namespace SIstema_Venda_SI.Controllers
         }
         public IActionResult Index()
         {
-            
+
             return View(VendaVM.ListarTodos());
         }
 
@@ -52,7 +52,10 @@ namespace SIstema_Venda_SI.Controllers
 
                 var venda = new Venda();
                 var listaItens = new List<ItensVenda>();
-
+                if (vendaVM.CodigoVenda > 0)
+                {
+                    venda.VenCodigo = vendaVM.CodigoVenda;
+                }
                 venda.VenCodigoCliente = vendaVM.CodigoCliente;
                 venda.VenCodigoTipoPagamento = vendaVM.CodigoTipoPagamento;
                 venda.VenQtdParcelas = vendaVM.QtdParcelas;
@@ -75,15 +78,15 @@ namespace SIstema_Venda_SI.Controllers
                     var listaParcelas = new List<Parcelas>();
                     var dataVencimento = venda.VenData.AddMonths(1);
 
-                    decimal valorTotalVenda = 0; 
+                    decimal valorTotalVenda = 0;
                     foreach (var item in venda.ItensVenda)
                     {
                         valorTotalVenda += (decimal)item.ItvValorItem * (decimal)item.ItvQuantidade;
                     }
                     for (int i = 1; i <= venda.VenQtdParcelas; i++)
                     {
-                       var parcela = new Parcelas();
-                      
+                        var parcela = new Parcelas();
+
                         parcela.ParValorParcela = valorTotalVenda / (int)venda.VenQtdParcelas;
                         parcela.ParNumeroParcela = i;
                         parcela.ParDataVencimento = dataVencimento;
@@ -92,9 +95,17 @@ namespace SIstema_Venda_SI.Controllers
                     }
                     venda.Parcelas = listaParcelas;
                 }
-                await _ServiceVenda.oRepositoryVenda.IncluirAsync(venda);
+                if (venda.VenCodigo > 0)
+                {
+                    await _ServiceVenda.oRepositoryVenda.AlterarAsync(venda, venda.ItensVenda.ToList(), venda.Parcelas.ToList());
+                }
+                else
+                {
+
+                    await _ServiceVenda.oRepositoryVenda.IncluirAsync(venda);
+                }
                 vendaVM.CodigoVenda = venda.VenCodigo;
-            
+
                 CarregaViewBag();
                 return View(vendaVM);
             }
@@ -103,7 +114,7 @@ namespace SIstema_Venda_SI.Controllers
 
                 throw;
             }
-          
+
         }
 
     }

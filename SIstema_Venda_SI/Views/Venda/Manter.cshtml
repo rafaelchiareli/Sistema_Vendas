@@ -92,7 +92,9 @@
                             <th>
                                 Total
                             </th>
-
+                            <th>
+                                Remover
+                            </th>
                         </tr>
                     </thead>
                     @{
@@ -119,6 +121,11 @@
                                     <td>
                                         @valorTotal
                                     </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger remover">Remover</button>
+                                    </td>
+
+
                                 </tr>
                                 contador += 1;
                             }
@@ -163,17 +170,23 @@
             $(this).closest("tr").remove();
         });
 
+
+        $("#tbProdutos").on("click", ".remover", function () {
+            $(this).closest("tr").remove();
+        });
+
+
         $(".adicionar").on("click", function () {
             var quantidadeEstoque = $("#cboProduto option:selected").attr("data-qtd");
 
             var quantidade = $("#txtQuantidade").val();
             console.log('qtdEstoque', quantidadeEstoque, 'qtd', quantidade);
-            var valorVenda = $("#txtValor").val().replace(".",",");
+            var valorVenda = $("#txtValor").val().replace(".", ",");
             if (parseInt(quantidade) > parseInt(quantidadeEstoque)) {
                 alert('A quantidade não pode ser maior que o estoque.');
             } else {
 
-                var valorTotal = parseFloat(valorVenda.replace(",",".")) * parseInt(quantidade);
+                var valorTotal = parseFloat(valorVenda.replace(",", ".")) * parseInt(quantidade);
 
 
 
@@ -191,6 +204,7 @@
                     `<td><input type="hidden" name="ListaProdutos[${contador}].Quantidade" value=${quantidade} />${quantidade}</td>` +
                     `<td><input type="hidden" name="ListaProdutos[${contador}].ValorVenda" value=${valorVenda} />${valorVenda}</td>` +
                     `<td>${valorTotal}</td>` +
+                    `<td><button type="button" class="btn btn-danger remover">Remover</button></td>` +
                     `</tr>`;
 
                 $("#tbProdutos tbody").append(linha);
