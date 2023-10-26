@@ -1,0 +1,59 @@
+﻿
+<h1>
+</h1>
+<div>
+    <form asp-action="Edit">
+        <div class="form-group col-md-7">
+            <input type="hidden" name="txtCliente" id="txtCliente" />
+            <label class="control-label">Cliente</label>
+            <select id="cboCliente" class="form-select">
+                <option value="" selected>
+                    Selecione um Cliente
+
+                </option>
+            </select>
+        </div>
+        <hr />
+        <div id="lista">
+        </div>
+        <button type="submit">Salvar</button>
+    </form>
+</div>
+@section Scripts{
+    <script>
+        const urlClientes = "@Url.Action("ListarClientes","Parcela")";
+        const urlParcelas = "@Url.Action("ListarParcelas","Parcela")";
+        const idCliente = "@ViewBag.idCliente";
+    </script>
+    <script>
+        
+        $.get(urlClientes, function (data) {
+            data.map((item) => {
+                var option = `<option value="${item.cliCodigo}">${item.cliNome}</option>`
+                $("#cboCliente").append(option);
+            })
+        });
+
+        function CarregarParcelas(idCliente) {
+            $("#txtCliente").val(idCliente);
+            $.get(urlParcelas + "?idCliente=" + idCliente, function (data) {
+                $("#lista").html(data);
+            });
+        }
+        $("#cboCliente").on("change", function () {
+            CarregarParcelas($(this).val());
+
+        });
+
+        $(document).ready(function(){
+            if (idCliente != "") {
+                CarregarParcelas(idCliente);              
+                $("#cboCliente").val(idCliente);
+            }
+        })
+
+
+
+    </script>
+
+}

@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Parcelas>
+
+<h1>Parcelas do Cliente - @ViewBag.nomeCliente</h1>
+
+    <table class="table table-sm">
+
+        <thead>
+            <tr>
+                <th>
+                    Número
+                </th>
+                <th>
+                    Valor
+                </th>
+                <th>
+                    Data de Vencimento
+                </th>
+                <th>
+                    Data Pagamento
+                </th>
+              
+            </tr>
+
+        </thead>
+        <tbody>
+        @{
+            int contador = 0;
+            foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                       <input type="hidden" name="Parcelas[@contador].ParCodigo" value=" @item.ParCodigo">
+                        <input type="hidden" name="Parcelas[@contador].ParNumeroParcela" value=" @item.ParNumeroParcela">
+                            @item.ParNumeroParcela
+                        </td>
+                        <td>
+                        <input type="hidden" name="Parcelas[@contador].ParValorParcela" value=" @item.ParValorParcela">
+                            @item.ParValorParcela
+                        </td>
+                        <td>
+                        <input type="hidden" name="Parcelas[@contador].ParDataVencimento" value=" @item.ParDataVencimento">
+                            @item.ParDataVencimento
+                        </td>
+                        <td>
+
+                        <input name="Parcelas[@contador].ParDataPagamento" type="date" class="form-control" id="txtDataPagamento" />
+                        </td>
+                      
+                    </tr>
+                    contador += 1;
+                }
+            }
+        </tbody>
+    </table>
