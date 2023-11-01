@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Sistema_Venda_SI.Model.Models;
+using Microsoft.AspNetCore.Identity;
+using SIstema_Venda_SI.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
 
 
 
@@ -13,7 +14,14 @@ builder.Services
     .AddDbContext<DBSISTEMASContext>(options => options
     .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddDbContext<identity_context>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<identity_context>();
 var app = builder.Build();
+
 
 
 
@@ -29,11 +37,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.MapRazorPages();
 app.Run();

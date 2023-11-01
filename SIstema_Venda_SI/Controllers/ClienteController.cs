@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGeneration.CommandLine;
 using Sistema_Venda_SI.Model.Models;
 using Sistema_Venda_SI.Model.Service;
 using SIstema_Venda_SI.ViewModel;
@@ -6,7 +8,9 @@ using SQLitePCL;
 
 namespace SIstema_Venda_SI.Controllers
 {
-    public class ClienteController : Controller
+   
+
+    public class ClienteController : DefaultController
     {
         private ServiceCliente _ServiceCliente;
         public ClienteController()
@@ -14,12 +18,13 @@ namespace SIstema_Venda_SI.Controllers
             _ServiceCliente = new ServiceCliente();
         }
 
+       
         public IActionResult Index()
         {
             var listaClientesVM = ClienteVM.ListarTodosClientes();
             return View(listaClientesVM);
         }
-
+  
         [HttpGet]
         public IActionResult Create()
         {
