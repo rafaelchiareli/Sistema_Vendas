@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34003.232
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIstema_Venda_SI", "SIstema_Venda_SI\SIstema_Venda_SI.csproj", "{797DC74A-9E15-4EFF-9747-494545931F49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIstema_Venda_SI", "SIstema_Venda_SI\SIstema_Venda_SI.csproj", "{797DC74A-9E15-4EFF-9747-494545931F49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sistema_Venda_SI.Model", "Sistema_Venda_SI.Model\Sistema_Venda_SI.Model.csproj", "{8120EDF0-D2FF-4CCC-B8BA-10E9C4E5CEFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sistema_Venda_SI.Model", "Sistema_Venda_SI.Model\Sistema_Venda_SI.Model.csproj", "{8120EDF0-D2FF-4CCC-B8BA-10E9C4E5CEFA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sistema_Venda.React", "Sistema_Venda.React\Sistema_Venda.React.csproj", "{A6D99BB0-4E4B-4C80-96CB-246AC7685B02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,12 @@ Global
 		{8120EDF0-D2FF-4CCC-B8BA-10E9C4E5CEFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8120EDF0-D2FF-4CCC-B8BA-10E9C4E5CEFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8120EDF0-D2FF-4CCC-B8BA-10E9C4E5CEFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6D99BB0-4E4B-4C80-96CB-246AC7685B02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6D99BB0-4E4B-4C80-96CB-246AC7685B02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6D99BB0-4E4B-4C80-96CB-246AC7685B02}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A6D99BB0-4E4B-4C80-96CB-246AC7685B02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6D99BB0-4E4B-4C80-96CB-246AC7685B02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6D99BB0-4E4B-4C80-96CB-246AC7685B02}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

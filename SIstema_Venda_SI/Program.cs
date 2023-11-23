@@ -19,11 +19,16 @@ builder.Services.AddDbContext<identity_context>(options =>
 
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<identity_context>();
 var app = builder.Build();
 
 
-
+app.UseCors(builder => builder
+.AllowAnyHeader()
+.AllowAnyMethod()
+.SetIsOriginAllowed((host) => true)
+.AllowCredentials());
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

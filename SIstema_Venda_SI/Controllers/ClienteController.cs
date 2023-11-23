@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.VisualStudio.Web.CodeGeneration.CommandLine;
 using Sistema_Venda_SI.Model.Models;
 using Sistema_Venda_SI.Model.Service;
 using SIstema_Venda_SI.ViewModel;
 using SQLitePCL;
+using System.Security.Claims;
 
 namespace SIstema_Venda_SI.Controllers
 {
@@ -12,15 +15,18 @@ namespace SIstema_Venda_SI.Controllers
 
     public class ClienteController : DefaultController
     {
+
         private ServiceCliente _ServiceCliente;
+
         public ClienteController()
         {
+           
             _ServiceCliente = new ServiceCliente();
         }
 
-       
         public IActionResult Index()
         {
+            var userId = User.FindFirstValue(ClaimTypes.Name);
             var listaClientesVM = ClienteVM.ListarTodosClientes();
             return View(listaClientesVM);
         }

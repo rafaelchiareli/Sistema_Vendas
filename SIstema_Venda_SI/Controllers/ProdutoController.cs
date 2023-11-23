@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Sistema_Venda_SI.Model.Models;
@@ -7,6 +8,7 @@ using SIstema_Venda_SI.ViewModel;
 
 namespace SIstema_Venda_SI.Controllers
 {
+
     public class ProdutoController : Controller
     {
         private ServiceProduto _ServiceProduto;

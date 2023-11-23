@@ -74,5 +74,27 @@ namespace SIstema_Venda_SI.Controllers
 
 
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ListarTodos()
+        {
+            return Ok(await _ServiceTipoProduto.oRepositoryTipoProduto.SelecionarTodosAsync());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateApi([FromBody]TipoProduto tipoProduto)
+        {
+            var tipoProdutoSalvo = await _ServiceTipoProduto.oRepositoryTipoProduto.IncluirAsync(tipoProduto);
+
+            return Ok(tipoProduto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditApi([FromBody] TipoProduto tipoProduto)
+        {
+            var tipoProdutoSalvo = await _ServiceTipoProduto.oRepositoryTipoProduto.AlterarAsync(tipoProduto);
+
+            return Ok(tipoProduto);
+        }
     }
 }
